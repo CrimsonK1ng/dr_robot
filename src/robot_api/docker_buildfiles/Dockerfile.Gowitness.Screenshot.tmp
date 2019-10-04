@@ -1,9 +1,10 @@
-FROM golang:1.13.0-alpine3.10 as build
+FROM golang:1.13.1-buster as build
 
 RUN if [ -n $dns ]; \
     then echo "nameserver $dns" >> /etc/resolv.conf;\
     fi;\
-	apk --no-cache add git ca-certificates; 
+	apt update && \
+	apt install -y git ca-certificates chromium; 
 
 ADD certs/ /usr/local/share/ca-certificates/
 RUN update-ca-certificates
