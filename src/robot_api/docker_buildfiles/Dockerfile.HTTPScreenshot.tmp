@@ -33,7 +33,4 @@ RUN cd httpscreenshot \
     && unzip -o chromedriver_linux64.zip \
     && ln -s /httpscreenshot/chromedriver /usr/bin/chromedriver
 
-RUN mkdir -p $output/httpscreenshot
-WORKDIR $output/httpscreenshot
-
 ENTRYPOINT mkdir -p $output/httpscreenshot && cd $output/httpscreenshot && httpscreenshot -i $infile -b chrome -p -w 40  -a -vH
