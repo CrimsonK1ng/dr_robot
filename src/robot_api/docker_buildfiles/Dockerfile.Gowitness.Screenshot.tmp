@@ -1,0 +1,31 @@
+FROM golang:1.13.0-alpine3.10 as build
+
+RUN if [ -n $dns ]; \
+    then echo "nameserver $dns" >> /etc/resolv.conf;\
+    fi;\
+	apk --no-cache add git ca-certificates; 
+
+ADD certs/ /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+
+RUN if [ -n $dns ]; \
+    then echo "nameserver $dns" >> /etc/resolv.conf;\
+    fi;\
+	go get -u github.com/sensepost/gowitness
+
+ENV GO111MODULE on
+
+WORKDIR /go/src/github.com/sensepost/gowitness
+
+RUN if [ -n $dns ]; \
+    then echo "nameserver $dns" >> /etc/resolv.conf;\
+    fi;\
+	go build
+
+ENV http_proxy $proxy
+ENV https_proxy $proxy
+ENV HOME /
+
+RUN mkdir -p $output/gowitness
+
+ENTRYPOINT gowitness file -s $infile --threads 20

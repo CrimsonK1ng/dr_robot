@@ -14,7 +14,7 @@ RUN update-ca-certificates
 
 RUN if [ -n $dns ]; \
     then echo "nameserver $dns" >> /etc/resolv.conf; fi;\
-    git clone https://github.com/Sandarmann/nmap-screenshot.git \
+    git clone https://github.com/CrimsonK1ng/nmap-screenshot.git \
     && cp nmap-screenshot/http-screenshot.nse /usr/share/nmap/scripts/http-screenshot.nse \
     && nmap --script-updatedb 
 
@@ -24,6 +24,6 @@ RUN if [ -n $dns ]; \
     && dpkg -i  wkhtml.deb
 
 RUN mkdir $output/nmapscreen
-WORKDIR $output
+WORKDIR $output/nmapscreen
 
 ENTRYPOINT nmap --script http-screenshot --script-args tool=$tool -iL $infile -p "80,8080,443,8888"
