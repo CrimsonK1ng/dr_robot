@@ -21,12 +21,12 @@ WORKDIR /go/src/github.com/sensepost/gowitness
 RUN if [ -n $dns ]; \
     then echo "nameserver $dns" >> /etc/resolv.conf;\
     fi;\
-	go build
+	go build && \
+	cp gowitness /usr/bin/
 
 ENV http_proxy $proxy
 ENV https_proxy $proxy
 ENV HOME /
 
-RUN mkdir -p $output/gowitness
 
-ENTRYPOINT gowitness file -s $infile --threads 20
+ENTRYPOINT mkdir $output/gowitness && cd $output/gowitness && gowitness file -s $infile --threads 20
